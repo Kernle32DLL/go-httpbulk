@@ -44,7 +44,10 @@ func NewExecutor(setters ...Option) Executor {
 // NewExecutor instantiates a new Executor with an http client and concurrency limit.
 func NewSimpleExecutor(client *http.Client, concurrencyLimit int) Executor {
 	// this buffered channel will block at the concurrency limit
-	semaphoreChan := make(chan struct{}, concurrencyLimit)
+	var semaphoreChan chan struct{}
+	if concurrencyLimit > 0 {
+		semaphoreChan = make(chan struct{}, concurrencyLimit)
+	}
 
 	// this channel will not block and collect the http request results
 	resultsChan := make(chan Result)
