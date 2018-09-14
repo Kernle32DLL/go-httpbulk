@@ -9,6 +9,10 @@ type Result struct {
 	err error
 }
 
+func (r *Result) SetErr(err error) {
+	r.err = err
+}
+
 // Url returns the originally requested url. If you want to know the final URL, look at the HTTP response.
 func (r *Result) Url() string {
 	return r.url
