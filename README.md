@@ -14,7 +14,7 @@ go get github.com/Kernle32DLL/go-httpbulk
 
 First, you have to instantiate a `bulk.Executor`. This can be either done via `bulk.NewExecutor` (which takes option style parameters), or via `
 
-```
+```go
 bulk.NewExecutor(bulk.Client(http.DefaultClient), bulk.ConcurrencyLimit(10))
 
 // or...
@@ -24,7 +24,7 @@ bulk.NewSimpleExecutor(http.DefaultClient, 10)
 
 With the executor instantiated, you can issue asynchronous requests via the `AddRequests` method:
 
-```
+```go
 urls := []string{
     "https://www.google.com",
     "https://www.bing.com",
@@ -39,7 +39,7 @@ For more control, you can use the `AddRequestsWithInterceptor` method, which all
 as well as inspecting the request result. The former is useful for setting headers and changing the request type, the latter for
 counting finished results.
 
-```
+```go
 // Initialize a wait group with the amount of urls to call
 wg := &sync.WaitGroup{}
 wg.Add(len(urls))
@@ -62,7 +62,7 @@ thus useful for error handling.
 
 If you don't need any synchronization at all, you can also use the `Results` method, which exposes the result channel.
 
-```
+```go
 for {
     select {
     case result := <-executor.Results():
@@ -79,5 +79,6 @@ Not yet battle tested, use with caution. On the other hand - the code is quite s
 ### Thanks
 
 This lib has been derived from the following code gist. All kudos to Montana Flynn (montanaflynn)
+
 https://gist.github.com/montanaflynn/ea4b92ed640f790c4b9cee36046a5383
 
