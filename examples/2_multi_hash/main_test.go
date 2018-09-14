@@ -31,8 +31,6 @@ func Test(t *testing.T) {
 		r.Method = "HEAD"
 		return nil
 	}, func(r *bulk.Result) {
-		defer wg.Done()
-
 		localHash := r.Res().Header.Get("etag")
 
 		t.Logf("%s hash %s", r.Url(), localHash)
@@ -44,8 +42,22 @@ func Test(t *testing.T) {
 		}
 	}, urls...)
 
+	closer := make(chan struct{})
+	defer close(closer)
+	go func() {
+		for {
+			select {
+			case <-executor.Results():
+				wg.Done()
+			case <-closer:
+				return
+			}
+		}
+	}()
+
 	// Wait for the results
 	wg.Wait()
+	closer <- struct{}{}
 
 	h := sha256.New()
 	for _, value := range hashes {
