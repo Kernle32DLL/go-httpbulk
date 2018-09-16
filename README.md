@@ -35,9 +35,22 @@ urls := []string{
 executor.AddRequests(context.Background(), urls...)
 ```
 
+For reading back the results use the Executors `Results` method, which exposes the result channel. Note that it is mandatory
+to read the channel, because otherwise requests will block, as the internal channel is blocking.
+
+```go
+for {
+    select {
+    case result := <-executor.Results():
+        wg.Done()
+        log.Printf("%s responded with %s", result.Url(), result.Res().Status)
+    }
+}
+```
+
 For more control, you can use the `AddRequestsWithInterceptor` method, which allows you to both modify the request prior to sending,
 as well as inspecting the request result. The former is useful for setting headers and changing the request type, the latter for
-counting finished results.
+counting finished results. Note, that you still need to read the result Channel via the Executors `Results` method!
 
 ```go
 // Initialize a wait group with the amount of urls to call
@@ -59,18 +72,6 @@ executor.AddRequestsWithInterceptor(context.Background(), func(r *http.Request) 
 Two caveats for using `AddRequestsWithInterceptor`: Both the request modified and result inspector are called for EACH url. If you need to
 execute some action after all requests have finished, synchronize via a `sync.WaitGroup`. Also, the result inspector is always called, and
 thus useful for error handling.
-
-If you don't need any synchronization at all, you can also use the `Results` method, which exposes the result channel.
-
-```go
-for {
-    select {
-    case result := <-executor.Results():
-        wg.Done()
-        log.Printf("%s responded with %s", result.Url(), result.Res().Status)
-    }
-}
-```
 
 ### Status
 
