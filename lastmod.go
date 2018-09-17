@@ -22,13 +22,14 @@ func FetchLastModDatesForUrls(options []Option, modifyRequest func(r *http.Reque
 		for i, url := range urls {
 			wg.Add(1)
 
+			index := i
 			executor.AddRequestsWithInterceptor(initialContext, modifyRequest, func(r *Result) {
 				lastModified, err := handleResponse(*r)
 				if err != nil {
 					r.SetErr(err)
 				}
 
-				times[i] = lastModified
+				times[index] = lastModified
 			}, url)
 		}
 
