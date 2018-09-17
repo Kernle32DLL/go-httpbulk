@@ -12,7 +12,7 @@ go get github.com/Kernle32DLL/go-httpbulk
 
 ### Usage
 
-First, you have to instantiate a `bulk.Executor`. This can be either done via `bulk.NewExecutor` (which takes option style parameters), or via `
+First, you have to instantiate a `bulk.Executor`. This can be either done via `bulk.NewExecutor` (which takes option style parameters), or via `bulk.NewSimpleExecutor` (which takes fixed parameters).
 
 ```go
 bulk.NewExecutor(bulk.Client(http.DefaultClient), bulk.ConcurrencyLimit(10))
