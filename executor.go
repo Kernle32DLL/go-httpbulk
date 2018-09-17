@@ -26,6 +26,15 @@ func (e *Executor) Results() chan Result {
 	return e.resultsChan
 }
 
+// Close closes the internal channels, and makes the Executor unavailable for further usage.
+func (e *Executor) Close() {
+	close(e.resultsChan)
+
+	if e.semaphoreChan != nil {
+		close(e.semaphoreChan)
+	}
+}
+
 // NewExecutor instantiates a new Executor.
 func NewExecutor(setters ...Option) Executor {
 	// Default Options
