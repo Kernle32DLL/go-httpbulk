@@ -1,11 +1,15 @@
 package bulk
 
-import "net/http"
+import (
+	"net/http"
+	"time"
+)
 
 // Result is a simple data holder for bulk request results.
 type Result struct {
 	url string
 	res *http.Response
+	dur time.Duration
 	err error
 }
 
@@ -26,4 +30,8 @@ func (r Result) Err() error {
 // Res returns the http response, if no error occurred.
 func (r Result) Res() http.Response {
 	return *r.res
+}
+
+func (r Result) Duration() time.Duration {
+	return r.dur
 }

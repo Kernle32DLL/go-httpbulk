@@ -4,6 +4,7 @@ import (
 	"context"
 	"golang.org/x/net/context/ctxhttp"
 	"net/http"
+	"time"
 )
 
 /**
@@ -109,21 +110,22 @@ func (e Executor) addRequestInternal(
 			doSend := true
 			if modifyRequest != nil {
 				if err := modifyRequest(req); err != nil {
-					result = Result{url, nil, err}
+					result = Result{url, nil, 0, err}
 					doSend = false
 				}
 			}
 
 			if doSend {
+				start := time.Now()
+
 				// send the request and put the response in a result struct
 				// along with the index so we can sort them later along with
 				// any error that might have occurred
 				res, err := ctxhttp.Do(ctx, e.client, req)
-
-				result = Result{url, res, err}
+				result = Result{url, res, time.Since(start), err}
 			}
 		} else {
-			result = Result{url, nil, err}
+			result = Result{url, nil, 0, err}
 		}
 
 		if inspectResult != nil {
