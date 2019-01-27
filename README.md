@@ -7,7 +7,7 @@ This is particularly useful, if you are aggregating an object from multiple reso
 Download:
 
 ```
-go get github.com/Kernle32DLL/go-httpbulk
+go get github.com/kernle32dll/go-httpbulk
 ```
 
 ### Usage
