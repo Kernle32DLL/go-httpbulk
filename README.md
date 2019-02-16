@@ -1,6 +1,6 @@
 # go-httpbulk
 
-**Beware: This lib is deprecated! Use [go-httpbulk](https://github.com/kernle32dll/go-httpbulk)**
+**Beware: This lib is deprecated! Use [httpbulk-go](https://github.com/kernle32dll/httpbulk-go)**
 
 go-httpbulk is a small wrapper lib, intended to ease the parallel loading of multiple http resources.
 
